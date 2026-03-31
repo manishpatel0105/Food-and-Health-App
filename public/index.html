@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NutriMind AI | Dashboard</title>
+  <meta name="description" content="NutriMind AI — your personal biometric nutrition intelligence dashboard."/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CDN (config injected via shared.js BEFORE this) -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="shared.js"></script>
+
+  <style>
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    body { min-height: max(884px, 100dvh); }
+
+    @keyframes pulse-ring {
+      0%,100% { transform:scale(1); box-shadow:0 0 20px rgba(223,142,255,0.08); }
+      50%      { transform:scale(1.015); box-shadow:0 0 35px rgba(223,142,255,0.22); }
+    }
+    .animate-pulse-ring { animation: pulse-ring 3s ease-in-out infinite; }
+
+    @keyframes slide-up {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .slide-up { animation: slide-up 0.35s ease-out forwards; }
+
+    .mood-btn { transition: all 0.2s ease; }
+    .mood-btn.active { border-color: #df8eff; box-shadow: 0 0 16px rgba(223,142,255,0.35); }
+    .mood-btn.active .mood-label { color: #df8eff; }
+
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:#070e1b; }
+    ::-webkit-scrollbar-thumb { background:#414857; border-radius:10px; }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 selection:text-on-surface">
+
+<!-- ── Top App Bar ── -->
+<nav class="fixed top-0 w-full z-50 bg-[#070e1b]/80 backdrop-blur-xl border-b border-[#df8eff]/15 shadow-[0_0_20px_rgba(223,142,255,0.08)] flex justify-between items-center px-6 h-16">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-[#df8eff]">bubble_chart</span>
+    <span class="text-xl font-black tracking-widest text-[#df8eff] uppercase font-headline">NutriMind AI</span>
+  </div>
+  <div class="relative">
+    <div class="w-10 h-10 rounded-full overflow-hidden border border-primary/30 ring-2 ring-primary/10">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJL1FMeC6_OXDJyEXwPmkiCNQVHsHZV8KtAOefek5qmxX8iH8Pyrk2bYjy4bMidpjoiAV4A6DY2k2tD31S4Wu-G-LgQlc1OS5viZoniTJGnbdb8gHISveiBjRuQu0uypbp_1k6Z1wL67w66o5SEddLFXPod9vZHxpE8sClsoUuxZRNGSdZty2UpQSdt1rK2Yx12NjDHpMugNzo9k_nxk51ewujHPGeevx8IqnEmWFkGPajIbcG45JrNPn2rWGZ_gcKvMLG0rWaH_G6" alt="User" class="w-full h-full object-cover"/>
+    </div>
+    <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-secondary rounded-full border-2 border-background"></div>
+  </div>
+</nav>
+
+<!-- ── Main Content ── -->
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-12">
+
+  <!-- Hero Row -->
+  <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div class="lg:col-span-7 space-y-8">
+      <div>
+        <span class="font-label text-secondary tracking-[0.2em] text-xs font-bold uppercase">SYSTEM_STATUS · OPTIMAL</span>
+        <h1 class="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-2 leading-none">
+          Welcome back,<br/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Operator 01.</span>
+        </h1>
+      </div>
+
+      <!-- Mood Selector -->
+      <div class="space-y-4">
+        <h3 class="font-label text-on-surface-variant text-xs tracking-widest font-bold uppercase">Biometric Mood Input</h3>
+        <div class="flex flex-wrap gap-4" id="mood-buttons">
+          <button id="btn-stress"    onclick="selectMood('stress')"    class="mood-btn flex items-center gap-3 px-6 py-4 bg-surface-container-high border border-outline-variant/20 rounded-sm group">
+            <span class="material-symbols-outlined text-tertiary">bolt</span>
+            <span class="mood-label font-label text-sm font-bold tracking-widest">STRESSED</span>
+          </button>
+          <button id="btn-optimized" onclick="selectMood('optimized')" class="mood-btn flex items-center gap-3 px-6 py-4 bg-surface-container-high border border-outline-variant/20 rounded-sm group">
+            <span class="material-symbols-outlined text-primary">mood</span>
+            <span class="mood-label font-label text-sm font-bold tracking-widest">OPTIMIZED</span>
+          </button>
+          <button id="btn-depleted"  onclick="selectMood('depleted')"  class="mood-btn flex items-center gap-3 px-6 py-4 bg-surface-container-high border border-outline-variant/20 rounded-sm group">
+            <span class="material-symbols-outlined text-secondary">bedtime</span>
+            <span class="mood-label font-label text-sm font-bold tracking-widest">DEPLETED</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bio Score Card -->
+    <div class="lg:col-span-5">
+      <div class="animate-pulse-ring relative bg-surface-container-highest/40 backdrop-blur-md rounded-sm border border-primary/20 flex flex-col items-center justify-center p-8 overflow-hidden" style="min-height:20rem">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
+        <div class="relative w-48 h-48 flex items-center justify-center">
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 192 192">
+            <circle cx="96" cy="96" r="88" fill="transparent" stroke="#1c2639" stroke-width="4"/>
+            <circle cx="96" cy="96" r="88" fill="transparent" stroke="#df8eff" stroke-width="8"
+                    stroke-dasharray="552.92" stroke-dashoffset="121.6"
+                    style="filter:drop-shadow(0 0 12px rgba(223,142,255,0.6))"/>
+          </svg>
+          <div class="absolute flex flex-col items-center">
+            <span class="text-6xl font-headline font-bold tracking-tighter">78</span>
+            <span class="font-label text-on-surface-variant text-[10px] tracking-widest font-bold mt-1">BIO_SYNC_SCORE</span>
+          </div>
+        </div>
+        <div class="mt-6 text-center space-y-1">
+          <p class="text-on-surface-variant text-sm max-w-[200px]">Metabolic efficiency is 12% higher than yesterday.</p>
+          <div class="flex items-center justify-center gap-2 text-secondary font-label text-xs font-bold uppercase mt-2">
+            <span class="material-symbols-outlined text-sm">trending_up</span>
+            <span>PEAK_PERFORMANCE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <button id="rec-btn" onclick="getRecommendation()" class="relative group h-32 flex items-center justify-between px-8 bg-gradient-to-r from-primary-container to-primary rounded-sm active:scale-95 duration-150 transition-all" style="box-shadow:0 0 15px rgba(223,142,255,0.3)">
+      <div class="z-10 text-left">
+        <span class="font-label text-on-primary-container text-xs font-bold tracking-[0.2em] block mb-1">AI_GENERATED</span>
+        <h2 class="font-headline text-2xl font-black text-on-primary-container uppercase tracking-tight">Get Recommendation</h2>
+      </div>
+      <span class="material-symbols-outlined text-5xl text-on-primary-container/30 group-hover:text-on-primary-container/80 group-hover:scale-110 transition-all">neurology</span>
+    </button>
+
+    <a href="food_scanner.html" class="relative group h-32 flex items-center justify-between px-8 bg-surface-container-high border-2 border-secondary/50 rounded-sm active:scale-95 duration-150 transition-all hover:border-secondary">
+      <div class="z-10 text-left">
+        <span class="font-label text-secondary text-xs font-bold tracking-[0.2em] block mb-1">VISION_SCAN</span>
+        <h2 class="font-headline text-2xl font-black text-on-surface uppercase tracking-tight">Scan Food</h2>
+      </div>
+      <span class="material-symbols-outlined text-5xl text-secondary opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all">center_focus_strong</span>
+    </a>
+  </section>
+
+  <!-- API Result Panel -->
+  <div id="result-panel" class="hidden">
+    <div id="result-card" class="slide-up bg-surface-container-high border border-primary/30 rounded-sm p-6">
+      <div class="flex items-start gap-6">
+        <div class="w-14 h-14 shrink-0 rounded-sm bg-surface-container flex items-center justify-center border border-primary/20">
+          <span id="result-emoji" class="text-3xl">🍫</span>
+        </div>
+        <div class="flex-1">
+          <span id="result-tag" class="font-label text-[10px] text-primary font-bold tracking-[0.2em] uppercase block mb-1">AI_RECOMMENDATION</span>
+          <p id="result-food"   class="font-headline text-2xl font-bold text-on-surface"></p>
+          <p id="result-reason" class="text-on-surface-variant text-sm mt-1"></p>
+        </div>
+        <div class="text-right shrink-0">
+          <p class="font-label text-[10px] text-on-surface-variant uppercase mb-1">Calories</p>
+          <p id="result-cal" class="font-headline text-2xl font-bold text-secondary"></p>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-outline-variant/20">
+        <div>
+          <p class="font-label text-[10px] text-primary uppercase tracking-wider mb-1">Protein</p>
+          <p id="result-prot" class="font-headline font-bold"></p>
+        </div>
+        <div>
+          <p class="font-label text-[10px] text-secondary uppercase tracking-wider mb-1">Carbs</p>
+          <p id="result-carb" class="font-headline font-bold"></p>
+        </div>
+        <div>
+          <p class="font-label text-[10px] text-tertiary uppercase tracking-wider mb-1">Fat</p>
+          <p id="result-fat" class="font-headline font-bold"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nutrient Protocol Cards -->
+  <section class="space-y-6">
+    <div class="flex justify-between items-end">
+      <div>
+        <h3 class="font-headline text-3xl font-bold tracking-tight">Nutrient Protocols</h3>
+        <p class="text-on-surface-variant font-body mt-1">Tailored fuel based on your metabolic readouts.</p>
+      </div>
+      <a href="insights.html" class="text-primary font-label text-xs tracking-widest font-bold uppercase hover:underline">VIEW INSIGHTS →</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Card 1 -->
+      <article class="group relative bg-surface-container-low rounded-sm overflow-hidden border border-outline-variant/10 hover:border-primary/30 transition-all flex flex-col h-[400px]">
+        <div class="h-1/2 overflow-hidden relative">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMki-FfH2N4KR_e5wBD1YxHRRmJS89e1rC03MxGQSk6WzRq0d_u8IN7DH4hz2-F0WeLFG1u8ZbNM_OVYZG342CP4sPiZ_j4SNn6vMt20lmGFNIXUpoB9VUWiKsQenTufF-LG5Z9SpHzrNDYHs1muPuoNuvsyzdbxpcTLiz1nu-m3KMqjAXGbm-tAwf9qpZB2bmRyMVOxSX_FlW7KneCHQQmg12M-U3T0jAsNMksz4z1Us7QTmMP7PwLRgbt871-9FD-BzHnN8oad4U" alt="Neural Fuel Bowl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+          <div class="absolute top-4 left-4 bg-primary/90 backdrop-blur-md px-3 py-1 rounded-sm">
+            <span class="text-[10px] font-label font-black tracking-widest text-on-primary">BREAKFAST</span>
+          </div>
+        </div>
+        <div class="p-6 flex-grow flex flex-col justify-between">
+          <div>
+            <h4 class="font-headline text-xl font-bold">Neural Fuel Bowl</h4>
+            <p class="text-on-surface-variant text-sm mt-2 line-clamp-2">High-omega infusion with avocado and flax-crusted bio-tofu.</p>
+          </div>
+          <div class="flex gap-4 mt-4">
+            <div class="flex flex-col"><span class="font-label text-[10px] text-primary font-bold uppercase tracking-tighter">PRO</span><span class="font-headline font-bold">24g</span></div>
+            <div class="flex flex-col"><span class="font-label text-[10px] text-secondary font-bold uppercase tracking-tighter">CARB</span><span class="font-headline font-bold">12g</span></div>
+            <div class="flex flex-col"><span class="font-label text-[10px] text-tertiary font-bold uppercase tracking-tighter">FAT</span><span class="font-headline font-bold">31g</span></div>
+          </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="group relative bg-surface-container-low rounded-sm overflow-hidden border border-outline-variant/10 hover:border-secondary/30 transition-all flex flex-col h-[400px]">
+        <div class="h-1/2 overflow-hidden relative">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIli4PcAbhezZX0kchAxOvfKf9Aw5zKhNWbnvSkyFK1ZhZP4wLKIyAKHKJUEAChlXvn531HkTdcyfqW-5mdU7tvaXeQ_BWV-3xGUL1THUyTGctzt677kVJZ0HZy_caEO_Zej9VcQ5cG9foAfSdz1oZvwXwYMRJ1F5UIxkaV5xMFdRF_HsJEVd3aqRlY_XYS8dyEsMfyvmbDT5q5vpYZfhz0DGnjpJwqJAowxggX9DEGmZBqJlUaOtkLf2MO8RRJtnLY1LgjQ9SjWWP" alt="Mito-Sync Salmon" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+          <div class="absolute top-4 left-4 bg-secondary/90 backdrop-blur-md px-3 py-1 rounded-sm">
+            <span class="text-[10px] font-label font-black tracking-widest text-on-secondary">LUNCH</span>
+          </div>
+        </div>
+        <div class="p-6 flex-grow flex flex-col justify-between">
+          <div>
+            <h4 class="font-headline text-xl font-bold">Mito-Sync Salmon</h4>
+            <p class="text-on-surface-variant text-sm mt-2 line-clamp-2">Cold-water salmon with mitochondria-boosting asparagus greens.</p>
+          </div>
+          <div class="flex gap-4 mt-4">
+            <div class="flex flex-col"><span class="font-label text-[10px] text-primary font-bold uppercase tracking-tighter">PRO</span><span class="font-headline font-bold">38g</span></div>
+            <div class="flex flex-col"><span class="font-label text-[10px] text-secondary font-bold uppercase tracking-tighter">CARB</span><span class="font-headline font-bold">8g</span></div>
+            <div class="flex flex-col"><span class="font-label text-[10px] text-tertiary font-bold uppercase tracking-tighter">FAT</span><span class="font-headline font-bold">19g</span></div>
+          </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="group relative bg-surface-container-low rounded-sm overflow-hidden border border-outline-variant/10 hover:border-tertiary/30 transition-all flex flex-col h-[400px]">
+        <div class="h-1/2 overflow-hidden relative">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6kky55lyoAi1niexjM-17ovSLPc2_Q0U4LT-ESrNpZ5WHk_rVDSemMFWn1LARrMGIhmfQohGg-rhCxu3rLo2-gENRx8joJYdCYhcH26vsRJUQGGrAKzSsBUudMcxHQCN4N1Ptik-fCXI4Y9Vy-QKBmhcKM0a7M0UJ28L94OVt6bRvFrkG3k2YWxuWj2PNI6FilG92BEoj6JLcFVhMbI1aPgeKfzPwJD51t6RM_zhh7-Py_hYxUw7qtAxFHn8n7f1CAA0ZHYDale5M" alt="Bio-Cacao Matrix" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+          <div class="absolute top-4 left-4 bg-tertiary/90 backdrop-blur-md px-3 py-1 rounded-sm">
+            <span class="text-[10px] font-label font-black tracking-widest text-on-tertiary">SUPPLEMENT</span>
+          </div>
+        </div>
+        <div class="p-6 flex-grow flex flex-col justify-between">
+          <div>
+            <h4 class="font-headline text-xl font-bold">Bio-Cacao Matrix</h4>
+            <p class="text-on-surface-variant text-sm mt-2 line-clamp-2">Dense energy block with activated cognitive enhancers.</p>
+          </div>
+          <div class="flex gap-4 mt-4">
+            <div class="flex flex-col"><span class="font-label text-[10px] text-primary font-bold uppercase tracking-tighter">PRO</span><span class="font-headline font-bold">12g</span></div>
+            <div class="flex flex-col"><span class="font-label text-[10px] text-secondary font-bold uppercase tracking-tighter">CARB</span><span class="font-headline font-bold">25g</span></div>
+            <div class="flex flex-col"><span class="font-label text-[10px] text-tertiary font-bold uppercase tracking-tighter">FAT</span><span class="font-headline font-bold">42g</span></div>
+          </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-0.5 bg-tertiary scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<!-- Ambient background glows -->
+<div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/5 blur-[120px] pointer-events-none z-0"></div>
+<div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary/5 blur-[120px] pointer-events-none z-0"></div>
+
+<script>
+  // Inject shared bottom nav (active = "dash")
+  injectNav("dash");
+
+  // ── State ──
+  let selectedMood = null;
+
+  // ── Mood selection ──
+  function selectMood(mood) {
+    selectedMood = mood;
+    ["stress", "optimized", "depleted"].forEach(m => {
+      document.getElementById(`btn-${m}`).classList.toggle("active", m === mood);
+    });
+  }
+
+  // ── Get Recommendation ──
+  async function getRecommendation() {
+    if (!selectedMood) {
+      // Auto-select first mood if none chosen
+      selectMood("stress");
+    }
+
+    const btn = document.getElementById("rec-btn");
+    btn.disabled = true;
+    btn.querySelector("h2").textContent = "Analyzing...";
+
+    try {
+      const data = await apiPost("/recommend", { mood: selectedMood });
+      showResult(data);
+    } catch (e) {
+      showError("Backend offline — run node server.js");
+    } finally {
+      btn.disabled = false;
+      btn.querySelector("h2").textContent = "Get Recommendation";
+    }
+  }
+
+  function showResult(data) {
+    const panel = document.getElementById("result-panel");
+    const card  = document.getElementById("result-card");
+
+    // Parse emoji from food string
+    const parts = data.food.split(" ");
+    const emoji = parts[parts.length - 1];
+    const name  = parts.slice(0, -1).join(" ");
+
+    document.getElementById("result-emoji").textContent  = emoji;
+    document.getElementById("result-food").textContent   = name;
+    document.getElementById("result-reason").textContent = data.reason;
+    document.getElementById("result-cal").textContent    = data.calories + " kcal";
+    document.getElementById("result-prot").textContent   = data.nutrients.protein;
+    document.getElementById("result-carb").textContent   = data.nutrients.carbs;
+    document.getElementById("result-fat").textContent    = data.nutrients.fat;
+
+    panel.classList.remove("hidden");
+    // Re-trigger animation
+    card.classList.remove("slide-up");
+    void card.offsetWidth;
+    card.classList.add("slide-up");
+
+    // Scroll into view smoothly
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function showError(msg) {
+    const panel = document.getElementById("result-panel");
+    document.getElementById("result-food").textContent   = "Error";
+    document.getElementById("result-reason").textContent = msg;
+    document.getElementById("result-emoji").textContent  = "⚠️";
+    document.getElementById("result-cal").textContent    = "—";
+    document.getElementById("result-prot").textContent   = "—";
+    document.getElementById("result-carb").textContent   = "—";
+    document.getElementById("result-fat").textContent    = "—";
+    panel.classList.remove("hidden");
+  }
+</script>
+</body>
+</html>

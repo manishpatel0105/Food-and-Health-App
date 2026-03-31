@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NutriMind AI | Insights</title>
+  <meta name="description" content="Real-time biometric insights and nutritional analytics powered by NutriMind AI."/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="shared.js"></script>
+
+  <style>
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    body { min-height: max(884px, 100dvh); }
+
+    .glass-card {
+      background: rgba(28, 38, 57, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .neon-purple { filter: drop-shadow(0 0 8px rgba(223,142,255,0.6)); }
+    .neon-cyan   { filter: drop-shadow(0 0 8px rgba(0,238,252,0.6));   }
+
+    @keyframes progress-fill { from { width:0; } to { width: var(--target-w); } }
+    .progress-bar { animation: progress-fill 1s 0.3s ease-out both; }
+
+    @keyframes fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    .fade-in { animation: fade-in 0.4s ease-out forwards; }
+
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:#070e1b; }
+    ::-webkit-scrollbar-thumb { background:#414857; border-radius:10px; }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 selection:text-on-surface">
+
+<!-- ── Top App Bar ── -->
+<header class="fixed top-0 w-full z-50 bg-[#070e1b]/80 backdrop-blur-xl border-b border-[#df8eff]/15 flex justify-between items-center px-6 h-16" style="box-shadow:0 0 20px rgba(223,142,255,0.08)">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-[#df8eff]">bubble_chart</span>
+    <h1 class="text-xl font-black tracking-widest text-[#df8eff] uppercase font-headline">NutriMind AI</h1>
+  </div>
+  <button onclick="loadInsights()" class="flex items-center gap-2 px-3 py-1.5 border border-outline-variant/30 text-on-surface-variant font-label text-[10px] uppercase tracking-widest hover:bg-white/5 transition-colors rounded-sm">
+    <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+  </button>
+</header>
+
+<!-- ── Main ── -->
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-8">
+
+  <!-- Hero -->
+  <section class="space-y-1">
+    <span class="font-label text-secondary text-xs tracking-[0.2em] uppercase font-bold">SYSTEM_DIAGNOSTICS</span>
+    <h2 class="font-headline text-4xl font-bold tracking-tighter">Biometric <span class="text-primary">Insights</span></h2>
+  </section>
+
+  <!-- Loading State -->
+  <div id="loading-state" class="flex flex-col items-center justify-center py-24 space-y-4">
+    <div class="w-12 h-12 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
+    <span class="font-label text-on-surface-variant text-sm uppercase tracking-widest">FETCHING BIOMETRICS...</span>
+  </div>
+
+  <!-- Error State -->
+  <div id="error-state" class="hidden flex-col items-center justify-center py-16 space-y-4 text-center">
+    <span class="material-symbols-outlined text-error text-4xl">wifi_off</span>
+    <p class="font-headline text-xl font-bold">Backend Offline</p>
+    <p class="text-on-surface-variant text-sm max-w-sm">Make sure the server is running:<br/><code class="text-secondary text-xs bg-surface-container px-2 py-1 rounded-sm">node server.js</code></p>
+    <button onclick="loadInsights()" class="mt-2 px-6 py-2 border border-primary/30 text-primary font-label text-xs uppercase tracking-widest hover:bg-primary/10 transition-colors">RETRY</button>
+  </div>
+
+  <!-- Data (populated by JS) -->
+  <div id="data-root" class="hidden space-y-8 fade-in">
+
+    <!-- Bento Grid: Chart + Side Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <!-- Main chart -->
+      <div class="md:col-span-2 glass-card p-6 rounded-sm border border-outline-variant/15 relative overflow-hidden h-[360px]">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h3 class="font-headline text-base font-bold uppercase tracking-wider">Correlation Matrix</h3>
+            <p class="text-xs text-on-surface-variant font-label">MOOD_SCORE vs METABOLIC_INDEX — This Week</p>
+          </div>
+          <div class="flex gap-4">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-primary" style="box-shadow:0 0 8px #df8eff"></span>
+              <span class="text-[10px] font-label text-on-surface-variant">MOOD</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-secondary" style="box-shadow:0 0 8px #00eefc"></span>
+              <span class="text-[10px] font-label text-on-surface-variant">HEALTH</span>
+            </div>
+          </div>
+        </div>
+        <div class="absolute bottom-12 left-6 right-6 h-44">
+          <svg class="w-full h-full overflow-visible" viewBox="0 0 400 100" preserveAspectRatio="none">
+            <!-- Grid lines -->
+            <line x1="0" x2="400" y1="20" y2="20" stroke="white" stroke-opacity="0.05" stroke-dasharray="4"/>
+            <line x1="0" x2="400" y1="50" y2="50" stroke="white" stroke-opacity="0.05" stroke-dasharray="4"/>
+            <line x1="0" x2="400" y1="80" y2="80" stroke="white" stroke-opacity="0.05" stroke-dasharray="4"/>
+            <!-- Fill areas -->
+            <path d="M0,50 Q40,20 80,60 T160,40 T240,70 T320,30 T400,50 V100 H0Z" fill="url(#moodFill)" opacity="0.15"/>
+            <path d="M0,70 Q40,80 80,40 T160,60 T240,20 T320,50 T400,30 V100 H0Z" fill="url(#healthFill)" opacity="0.15"/>
+            <!-- Lines -->
+            <path class="neon-purple" d="M0,50 Q40,20 80,60 T160,40 T240,70 T320,30 T400,50" fill="none" stroke="#df8eff" stroke-width="2.5"/>
+            <path class="neon-cyan"   d="M0,70 Q40,80 80,40 T160,60 T240,20 T320,50 T400,30" fill="none" stroke="#00eefc" stroke-width="2.5"/>
+            <!-- Highlight points -->
+            <circle class="neon-cyan"   cx="240" cy="20" r="4" fill="#00eefc"/>
+            <circle class="neon-purple" cx="320" cy="30" r="4" fill="#df8eff"/>
+            <!-- Gradient defs -->
+            <defs>
+              <linearGradient id="moodFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#df8eff"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </linearGradient>
+              <linearGradient id="healthFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#00eefc"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="flex justify-between mt-3 text-[9px] font-label text-on-surface-variant/60 uppercase tracking-wider">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side Metrics -->
+      <div class="space-y-4 flex flex-col">
+        <!-- Calories -->
+        <div class="glass-card p-5 rounded-sm border-l-2 border-secondary flex flex-col justify-between flex-1">
+          <span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Total Calories</span>
+          <div class="mt-2 flex items-baseline gap-1">
+            <span id="stat-calories" class="font-headline text-3xl font-bold text-secondary">—</span>
+            <span class="text-xs text-on-surface-variant font-label">KCAL</span>
+          </div>
+          <div class="mt-3 h-1 w-full bg-surface-container rounded-full overflow-hidden">
+            <div id="cal-bar" class="h-full bg-secondary progress-bar" style="--target-w:0%;width:0"></div>
+          </div>
+        </div>
+        <!-- Top Mood -->
+        <div class="glass-card p-5 rounded-sm border-l-2 border-primary flex flex-col justify-between flex-1">
+          <span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Top Mood</span>
+          <div class="mt-2 flex items-center gap-3">
+            <span id="stat-mood" class="font-headline text-2xl font-bold text-primary italic">—</span>
+            <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings:'FILL' 1">bolt</span>
+          </div>
+          <p id="stat-mood-pct" class="text-[10px] text-on-surface-variant/80 mt-1 uppercase tracking-wider">—</p>
+        </div>
+        <!-- Health Streak -->
+        <div class="glass-card p-5 rounded-sm border-l-2 border-tertiary flex flex-col justify-between flex-1">
+          <span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Health Streak</span>
+          <div class="mt-2 flex items-baseline gap-1">
+            <span id="stat-streak" class="font-headline text-3xl font-bold text-tertiary">—</span>
+            <span class="text-xs text-on-surface-variant font-label">DAYS</span>
+          </div>
+          <div class="mt-2 flex gap-1">
+            ${[0,1,2,3,4].map(() => `<div class="w-5 h-5 rounded-sm bg-tertiary-container/20 border border-tertiary/30 flex items-center justify-center"><span class="material-symbols-outlined text-[12px] text-tertiary" style="font-variation-settings:'FILL' 1">check</span></div>`).join('')}
+            <div class="w-5 h-5 rounded-sm bg-surface-container border border-outline-variant/20 flex items-center justify-center"><span class="text-[7px] text-on-surface-variant">+</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight Block -->
+    <section class="relative">
+      <div class="absolute inset-0 bg-primary/5 blur-3xl -z-10 rounded-full"></div>
+      <div class="glass-card border border-primary/20 p-8 rounded-sm flex flex-col md:flex-row items-center gap-8">
+        <div class="w-20 h-20 shrink-0 relative flex-shrink-0">
+          <div class="absolute inset-0 bg-primary animate-pulse blur-xl opacity-30"></div>
+          <div class="relative w-full h-full bg-surface-container-high rounded-sm border border-primary/40 flex items-center justify-center">
+            <span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings:'FILL' 1">psychology</span>
+          </div>
+        </div>
+        <div class="flex-1 space-y-4 text-center md:text-left">
+          <div class="inline-block px-3 py-1 bg-primary/10 border border-primary/30 rounded-sm">
+            <span class="font-label text-[10px] text-primary font-bold tracking-[0.2em] uppercase">AI_NEURAL_INSIGHT</span>
+          </div>
+          <p id="ai-insight" class="font-headline text-2xl font-medium text-on-surface leading-tight">&ldquo;Loading...&rdquo;</p>
+          <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
+            <button class="px-6 py-2 bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-label text-[10px] font-black uppercase tracking-widest active:scale-95 duration-150 transition-all border border-on-primary/20">
+              Apply Suggestion
+            </button>
+            <button class="px-6 py-2 border border-outline-variant/30 text-on-surface-variant font-label text-[10px] uppercase tracking-widest hover:bg-white/5 transition-colors">
+              Dismiss
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Log History -->
+    <section class="space-y-4">
+      <div class="flex justify-between items-end">
+        <h3 class="font-headline text-2xl font-bold tracking-tight uppercase">Log History</h3>
+        <span class="font-label text-[10px] text-primary uppercase tracking-widest font-bold cursor-pointer hover:underline">VIEW FULL LOG</span>
+      </div>
+      <div id="log-list" class="space-y-2">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Ambient glows -->
+<div class="fixed top-0 left-0 w-[50%] h-[50%] rounded-full bg-primary/5 blur-[120px] pointer-events-none z-0"></div>
+<div class="fixed bottom-0 right-0 w-[50%] h-[40%] rounded-full bg-secondary/5 blur-[100px] pointer-events-none z-0"></div>
+
+<script>
+  injectNav("insights");
+
+  const logIconColors = { primary: "#df8eff", secondary: "#00eefc", tertiary: "#ff6e81" };
+
+  async function loadInsights() {
+    document.getElementById("loading-state").classList.remove("hidden");
+    document.getElementById("error-state").classList.add("hidden");
+    document.getElementById("data-root").classList.add("hidden");
+
+    try {
+      const data = await apiGet("/insights");
+      renderInsights(data);
+    } catch (e) {
+      document.getElementById("loading-state").classList.add("hidden");
+      document.getElementById("error-state").classList.remove("hidden");
+    }
+  }
+
+  function renderInsights(data) {
+    // Metrics
+    document.getElementById("stat-calories").textContent = data.totalCalories.toLocaleString();
+    document.getElementById("stat-mood").textContent     = data.topMood;
+    document.getElementById("stat-mood-pct").textContent = data.topMoodPct + "% OF ACTIVE TIME";
+    document.getElementById("stat-streak").textContent   = data.streak;
+
+    // Calorie progress bar
+    const bar = document.getElementById("cal-bar");
+    bar.style.setProperty("--target-w", data.caloriePct + "%");
+    bar.style.width = data.caloriePct + "%";
+
+    // AI Insight
+    const el = document.getElementById("ai-insight");
+    el.innerHTML = formatInsight(data.insight);
+
+    // Log list
+    const list = document.getElementById("log-list");
+    list.innerHTML = data.log.map(item => {
+      const color = logIconColors[item.color] || "#a5abbd";
+      return `
+        <div class="flex items-center gap-4 p-4 glass-card hover:bg-[#df8eff]/5 transition-colors rounded-sm">
+          <div class="w-10 h-10 rounded-sm bg-surface-container flex items-center justify-center border border-outline-variant/10">
+            <span class="material-symbols-outlined" style="color:${color}">${item.icon}</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-sm font-bold text-on-surface font-headline uppercase truncate">${item.name}</h4>
+            <p class="text-xs text-on-surface-variant font-label">${item.time} — ${item.tag}</p>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="font-headline text-lg font-bold text-on-surface">${item.calories}</span>
+            <span class="text-[10px] font-label text-on-surface-variant ml-1">KCAL</span>
+          </div>
+        </div>`;
+    }).join("");
+
+    // Show data
+    document.getElementById("loading-state").classList.add("hidden");
+    document.getElementById("data-root").classList.remove("hidden");
+  }
+
+  function formatInsight(text) {
+    // Highlight key terms in the insight string
+    return `"${text
+      .replace(/stress levels/gi,  '<span class="text-tertiary">stress levels</span>')
+      .replace(/sugar intake/gi,   '<span class="text-primary">sugar intake</span>')
+      .replace(/magnesium/gi,      '<span class="text-secondary">magnesium</span>')}"`;
+  }
+
+  // Load on page ready
+  document.addEventListener("DOMContentLoaded", loadInsights);
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NutriMind AI | Food Scanner</title>
+  <meta name="description" content="Scan any food item and instantly get AI-powered nutritional analysis."/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="shared.js"></script>
+
+  <style>
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    body { min-height: max(884px, 100dvh); }
+
+    @keyframes scan-line {
+      0%   { top: 10%; opacity: 1; }
+      50%  { top: 90%; opacity: 1; }
+      100% { top: 10%; opacity: 0.3; }
+    }
+    .scan-line { animation: scan-line 1.8s ease-in-out infinite; }
+
+    @keyframes ripple {
+      0%   { transform: scale(0.8); opacity: 0.8; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    .ripple-ring { animation: ripple 2s ease-out infinite; }
+    .ripple-ring-2 { animation: ripple 2s 0.5s ease-out infinite; }
+    .ripple-ring-3 { animation: ripple 2s 1s ease-out infinite; }
+
+    @keyframes slide-up {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .slide-up { animation: slide-up 0.4s ease-out forwards; }
+
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:#070e1b; }
+    ::-webkit-scrollbar-thumb { background:#414857; border-radius:10px; }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 selection:text-on-surface">
+
+<!-- ── Top App Bar ── -->
+<nav class="fixed top-0 w-full z-50 bg-[#070e1b]/80 backdrop-blur-xl border-b border-[#00eefc]/15 flex justify-between items-center px-6 h-16" style="box-shadow:0 0 20px rgba(0,238,252,0.08)">
+  <div class="flex items-center gap-3">
+    <a href="index.html" class="material-symbols-outlined text-on-surface-variant hover:text-secondary transition-colors">arrow_back</a>
+    <h1 class="text-xl font-black tracking-widest text-secondary uppercase font-headline">Scanner</h1>
+  </div>
+  <div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-high rounded-sm border border-outline-variant/20">
+    <div class="w-2 h-2 rounded-full bg-secondary" style="box-shadow:0 0 8px rgba(0,238,252,0.6)"></div>
+    <span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">VISION_ACTIVE</span>
+  </div>
+</nav>
+
+<!-- ── Main Content ── -->
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto space-y-10">
+
+  <!-- Scanner Viewport -->
+  <section class="space-y-4">
+    <div class="text-center">
+      <span class="font-label text-secondary text-xs tracking-[0.2em] uppercase">VISUAL_SCANNER · v4.2</span>
+      <h2 class="font-headline text-3xl font-bold tracking-tight mt-1">Scan <span class="text-secondary">Any Food</span></h2>
+    </div>
+
+    <!-- Camera / Scanner mockup -->
+    <div class="relative aspect-square max-w-sm mx-auto rounded-sm overflow-hidden border border-[#00eefc]/20" style="background:rgba(17,25,42,0.6)">
+      <img id="scanner-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBT0_MQ-V25-dLcL1bLHO25x28Sbi9_TkrPzRxFdGJJRjvL7lGYXb9Hv10bMb0FLN1LZd6cbzjMxhAf5-38pfrWK73KlQkPWVw0uoiGFMOfiipiWRNvOfDnAI59kWrRKFUkYs7TgM-kQqXTlMvhLUvRPlb3HbQUL3oQS8r74gn9bAA-QmEm7ufpICO7k7f_VqCbLm0mVeRSy3b26nGLgW9-JAJ0a6Bn_k3h2LNNWKSvgvIWx3Qf6-hgjJ-mTInrkdJpTv4aOO1xM"
+           alt="Food being scanned" class="w-full h-full object-cover"/>
+
+      <!-- Overlay grid -->
+      <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,238,252,0.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,238,252,0.04) 40px)"></div>
+
+      <!-- Corner brackets -->
+      <div class="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-secondary"></div>
+      <div class="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-secondary"></div>
+      <div class="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-secondary"></div>
+      <div class="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-secondary"></div>
+
+      <!-- Scan Line (shown only while scanning) -->
+      <div id="scan-line-el" class="scan-line hidden absolute left-4 right-4 h-0.5 pointer-events-none" style="background:linear-gradient(to right, transparent, #00eefc, transparent)"></div>
+
+      <!-- Idle label -->
+      <div id="scan-idle-label" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div class="text-center bg-surface-container-lowest/60 backdrop-blur-sm rounded-sm px-4 py-3">
+          <span class="material-symbols-outlined text-secondary text-3xl block mb-1">center_focus_strong</span>
+          <span class="font-label text-secondary text-xs tracking-widest font-bold">POINT & SCAN</span>
+        </div>
+      </div>
+
+      <!-- Scanning label -->
+      <div id="scan-active-label" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div class="text-center bg-surface-container-lowest/70 backdrop-blur-sm rounded-sm px-4 py-3">
+          <span class="font-label text-secondary text-xs tracking-widest font-bold animate-pulse">ANALYZING COMPOUNDS...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scan Trigger Button -->
+    <div class="flex justify-center">
+      <button id="scan-btn" onclick="triggerScan()" class="relative flex items-center gap-4 focus:outline-none group">
+        <!-- Ripple rings -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" id="scan-ripples">
+          <div class="absolute w-20 h-20 rounded-full border border-secondary opacity-0" id="ring1"></div>
+          <div class="absolute w-20 h-20 rounded-full border border-secondary opacity-0" id="ring2"></div>
+        </div>
+        <div id="scan-circle" class="relative z-10 w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 active:scale-90"
+             style="background:radial-gradient(circle, #00eefc, #006970); box-shadow:0 0 30px rgba(0,238,252,0.5)">
+          <span id="scan-icon" class="material-symbols-outlined text-on-secondary text-3xl" style="font-variation-settings:'FILL' 1">center_focus_strong</span>
+        </div>
+        <div class="text-left">
+          <span class="font-headline text-xl font-bold text-on-surface block">Scan Food</span>
+          <span class="font-label text-xs text-on-surface-variant uppercase tracking-widest">Click to analyze</span>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- Result panel — hidden until scan completes -->
+  <div id="result-panel" class="hidden">
+    <div class="slide-up bg-surface-container-high border border-secondary/30 rounded-sm overflow-hidden">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-outline-variant/15 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl" id="res-emoji">🐟</span>
+          <div>
+            <p class="font-label text-[10px] text-secondary font-bold tracking-[0.2em] uppercase">SCAN_RESULT</p>
+            <h3 id="res-food" class="font-headline text-xl font-bold text-on-surface"></h3>
+          </div>
+        </div>
+        <div id="res-grade-badge" class="w-12 h-12 rounded-sm flex items-center justify-center">
+          <span id="res-grade" class="font-headline text-xl font-bold"></span>
+        </div>
+      </div>
+
+      <!-- Macro grid -->
+      <div class="grid grid-cols-2 gap-px bg-outline-variant/10">
+        <!-- Calories -->
+        <div class="px-6 py-5 bg-surface-container-high">
+          <p class="font-label text-[10px] text-secondary font-bold uppercase tracking-widest">Calories</p>
+          <p class="font-headline text-3xl font-bold mt-1"><span id="res-cal"></span> <span class="text-sm font-label text-on-surface-variant">kcal</span></p>
+        </div>
+        <!-- Health -->
+        <div class="px-6 py-5 bg-surface-container-high">
+          <p class="font-label text-[10px] text-primary font-bold uppercase tracking-widest">Health</p>
+          <p id="res-health" class="font-headline text-3xl font-bold mt-1"></p>
+        </div>
+        <!-- Macros row -->
+        <div class="col-span-2 px-6 py-5 bg-surface-container-high flex gap-8 border-t border-outline-variant/10">
+          <div>
+            <p class="font-label text-[10px] text-primary font-bold uppercase tracking-widest">Protein</p>
+            <p id="res-prot" class="font-headline text-xl font-bold mt-1"></p>
+          </div>
+          <div>
+            <p class="font-label text-[10px] text-secondary font-bold uppercase tracking-widest">Carbs</p>
+            <p id="res-carb" class="font-headline text-xl font-bold mt-1"></p>
+          </div>
+          <div>
+            <p class="font-label text-[10px] text-tertiary font-bold uppercase tracking-widest">Fat</p>
+            <p id="res-fat" class="font-headline text-xl font-bold mt-1"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan again -->
+      <div class="px-6 py-4 border-t border-outline-variant/15">
+        <button onclick="triggerScan()" class="w-full py-3 border border-secondary/40 text-secondary font-label text-xs tracking-widest uppercase font-bold hover:bg-secondary/10 transition-colors">
+          SCAN ANOTHER ITEM
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips Section -->
+  <section class="space-y-3">
+    <h3 class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/25 pb-2">SCANNER TIPS</h3>
+    <div class="space-y-2">
+      <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-sm">
+        <span class="material-symbols-outlined text-secondary text-lg mt-0.5" style="font-variation-settings:'FILL' 1">help</span>
+        <p class="text-sm text-on-surface-variant leading-relaxed">Ensure good lighting to improve compound identification accuracy.</p>
+      </div>
+      <div class="flex items-start gap-3 p-4 bg-surface-container-low rounded-sm">
+        <span class="material-symbols-outlined text-primary text-lg mt-0.5" style="font-variation-settings:'FILL' 1">tips_and_updates</span>
+        <p class="text-sm text-on-surface-variant leading-relaxed">Place food on a clear background for best results.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Ambient glow -->
+<div class="fixed bottom-0 right-0 w-[60%] h-[50%] rounded-full bg-secondary/5 blur-[100px] pointer-events-none z-0"></div>
+
+<script>
+  injectNav("scan");
+
+  const gradeColors = {
+    "A":  { bg: "bg-secondary/20 border border-secondary/40",  text: "text-secondary" },
+    "A-": { bg: "bg-secondary/20 border border-secondary/40",  text: "text-secondary" },
+    "B+": { bg: "bg-primary/20  border border-primary/40",   text: "text-primary"   },
+    "C+": { bg: "bg-tertiary/20 border border-tertiary/40",  text: "text-tertiary"  },
+    "C":  { bg: "bg-error/20   border border-error/40",      text: "text-error"     },
+  };
+
+  let scanning = false;
+
+  async function triggerScan() {
+    if (scanning) return;
+    scanning = true;
+
+    // Activate scanning UI
+    const idleLabel   = document.getElementById("scan-idle-label");
+    const activeLabel = document.getElementById("scan-active-label");
+    const scanLine    = document.getElementById("scan-line-el");
+    const panel       = document.getElementById("result-panel");
+    const ring1       = document.getElementById("ring1");
+    const ring2       = document.getElementById("ring2");
+
+    idleLabel.classList.add("hidden");
+    activeLabel.classList.remove("hidden");
+    scanLine.classList.remove("hidden");
+    pannel?.classList.add("hidden");
+    panel.classList.add("hidden");
+
+    // Animated rings on button
+    ring1.classList.add("ripple-ring");
+    ring2.classList.add("ripple-ring-2");
+
+    try {
+      const data = await apiPost("/scan");
+      showResult(data);
+    } catch (e) {
+      showError();
+    } finally {
+      scanning = false;
+      idleLabel.classList.remove("hidden");
+      activeLabel.classList.add("hidden");
+      scanLine.classList.add("hidden");
+      ring1.classList.remove("ripple-ring");
+      ring2.classList.remove("ripple-ring-2");
+    }
+  }
+
+  function showResult(data) {
+    const panel = document.getElementById("result-panel");
+    const parts = data.food.split(" ");
+    const emoji = parts[parts.length - 1];
+    const name  = parts.slice(0, -1).join(" ");
+
+    document.getElementById("res-emoji").textContent  = emoji;
+    document.getElementById("res-food").textContent   = name;
+    document.getElementById("res-cal").textContent    = data.calories;
+    document.getElementById("res-health").textContent = data.health;
+    document.getElementById("res-prot").textContent   = data.protein;
+    document.getElementById("res-carb").textContent   = data.carbs;
+    document.getElementById("res-fat").textContent    = data.fat;
+
+    const badge    = document.getElementById("res-grade-badge");
+    const gradeEl  = document.getElementById("res-grade");
+    const colors   = gradeColors[data.grade] || { bg: "bg-outline/20", text: "text-on-surface-variant" };
+    badge.className    = `w-12 h-12 rounded-sm flex items-center justify-center ${colors.bg}`;
+    gradeEl.className  = `font-headline text-xl font-bold ${colors.text}`;
+    gradeEl.textContent = data.grade;
+
+    panel.classList.remove("hidden");
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function showError() {
+    document.getElementById("res-food").textContent   = "Scan Failed";
+    document.getElementById("res-emoji").textContent  = "⚠️";
+    document.getElementById("res-cal").textContent    = "—";
+    document.getElementById("res-health").textContent = "Error";
+    document.getElementById("res-prot").textContent   = "—";
+    document.getElementById("res-carb").textContent   = "—";
+    document.getElementById("res-fat").textContent    = "—";
+    document.getElementById("result-panel").classList.remove("hidden");
+  }
+</script>
+</body>
+</html>

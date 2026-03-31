@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#11192a",
+              "on-primary": "#4f006d",
+              "tertiary-fixed": "#ff909b",
+              "surface-container-low": "#0c1322",
+              "surface-bright": "#222c41",
+              "on-secondary-fixed-variant": "#005e64",
+              "on-primary-fixed": "#000000",
+              "tertiary-fixed-dim": "#ff7989",
+              "surface-container-high": "#172031",
+              "primary-container": "#d878ff",
+              "on-primary-container": "#3d0055",
+              "on-background": "#e2e8fb",
+              "on-secondary": "#005359",
+              "on-primary-fixed-variant": "#4b0068",
+              "tertiary-dim": "#e7004c",
+              "surface-variant": "#1c2639",
+              "secondary-dim": "#00deec",
+              "on-tertiary": "#490012",
+              "surface-container-lowest": "#000000",
+              "surface-dim": "#070e1b",
+              "outline": "#6f7586",
+              "secondary-fixed-dim": "#00deec",
+              "inverse-surface": "#f9f9ff",
+              "surface-container-highest": "#1c2639",
+              "on-error-container": "#ffb2b9",
+              "surface": "#070e1b",
+              "on-secondary-container": "#e3fdff",
+              "inverse-primary": "#9a00d0",
+              "secondary-container": "#006970",
+              "on-error": "#490013",
+              "on-secondary-fixed": "#003f43",
+              "surface-tint": "#df8eff",
+              "tertiary-container": "#ff0355",
+              "outline-variant": "#414857",
+              "background": "#070e1b",
+              "error-container": "#a70138",
+              "primary-fixed": "#d878ff",
+              "on-tertiary-fixed": "#39000c",
+              "on-surface-variant": "#a5abbd",
+              "tertiary": "#ff6e81",
+              "secondary": "#00eefc",
+              "primary-fixed-dim": "#d061ff",
+              "on-tertiary-fixed-variant": "#780023",
+              "on-tertiary-container": "#000000",
+              "error-dim": "#d73357",
+              "error": "#ff6e84",
+              "primary-dim": "#bb00fc",
+              "secondary-fixed": "#00eefc",
+              "on-surface": "#e2e8fb",
+              "primary": "#df8eff",
+              "inverse-on-surface": "#4e5565"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kinetic-gradient-text {
+            background: linear-gradient(135deg, #df8eff 0%, #00eefc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bio-gauge-track {
+            background: linear-gradient(90deg, #ff6e81 0%, #df8eff 100%);
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070e1b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #414857;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#070e1b]/80 backdrop-blur-xl border-b border-[#df8eff]/15 shadow-[0_0_20px_rgba(223,142,255,0.08)] flex justify-between items-center px-6 h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#df8eff]" data-icon="bubble_chart">bubble_chart</span>
+<span class="text-xl font-black tracking-widest text-[#df8eff] uppercase font-headline">NutriMind AI</span>
+</div>
+<div class="relative group">
+<div class="w-10 h-10 rounded-full border-2 border-[#df8eff] overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="high-tech futuristic 3D avatar with cybernetic implants and glowing purple neon eyes on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnsHuoajIcvyj-VVOxRv9IO2wb1aVstP7jAvYI9lJleHbeBm8Aq3xZ7fEmJfKw7tJ9d9oufcMXbBP97KHL8wmwyy_Dnd9TInplk5Xix-6a6ggJsPAx84zy6_tq3I9KNeu6P_DxVrLyFlAoZJGYsQZazaE84-XI4oRbvkXw8sM-M6qQjMu4wWfeqvb5I6SJ2pnPrkb3An6mKUIv0uIZajSKA82EfYMGx20-vyUoEmS0BlJhvVEBX7Vv_FZGzAVn4KinG-qOXFQqSDhH"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-[#00eefc] rounded-full border-2 border-[#070e1b] flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-[#070e1b]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-32 px-6 max-w-lg mx-auto">
+<!-- Profile Header -->
+<header class="mb-12 text-center relative">
+<div class="inline-block p-1 bg-gradient-to-tr from-primary via-secondary to-tertiary rounded-full mb-6">
+<div class="bg-surface rounded-full p-1">
+<img alt="Avatar Large" class="w-32 h-32 rounded-full object-cover" data-alt="high-tech futuristic 3D avatar with cybernetic implants and glowing purple neon eyes on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE2vjvgz-Gli5ACKf5sgeEMS6UaLP47mKm69LP1qkvni9NlV52ykT5OgB6W3R4aYM99uhImVNyrx457kA_Mv6FpfmgNMgNk6zZFc9iv6o-zc2QGDmJFHkiFFU8rYkLqWCZZtKR_DFGGmZVPy5FhnroJslHEpLaQ8aly6A3jLtNaZ6F3bvt4dQffBf1LeoTQrgGJYaQVw6o6PDR1-cJlJvFMmX6LE_XQHGeH1iNBFR2jVUid6LJkyWvnmDMQ5DwbU4dm1zmHaAtfUUd"/>
+</div>
+</div>
+<h1 class="font-headline text-4xl font-bold tracking-tight mb-2">NEO_GEN_09</h1>
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high border border-primary/20 rounded-sm">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label text-xs tracking-[0.1em] text-on-surface-variant uppercase">Level 15 Health Guardian</span>
+</div>
+</header>
+<!-- Stats Bento Grid -->
+<section class="grid grid-cols-2 gap-4 mb-10">
+<div class="bg-surface-container-low p-6 rounded-sm border-l-2 border-primary relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-4xl" data-icon="local_fire_department">local_fire_department</span>
+</div>
+<p class="font-label text-xs text-on-surface-variant mb-1">STREAK_ACTIVE</p>
+<h2 class="font-headline text-4xl font-bold text-primary">12 <span class="text-lg">DAYS</span></h2>
+</div>
+<div class="bg-surface-container-low p-6 rounded-sm border-l-2 border-secondary relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-4xl" data-icon="database">database</span>
+</div>
+<p class="font-label text-xs text-on-surface-variant mb-1">HEALTH_XP</p>
+<h2 class="font-headline text-4xl font-bold text-secondary">4,850</h2>
+</div>
+</section>
+<!-- Health Level Progress -->
+<section class="mb-12 bg-surface-container-high p-6 backdrop-blur-xl border border-white/5">
+<div class="flex justify-between items-end mb-4">
+<div>
+<p class="font-label text-[10px] text-on-surface-variant uppercase mb-1">System_Integrity</p>
+<h3 class="font-headline text-xl font-bold uppercase tracking-wide">Evolution Progress</h3>
+</div>
+<p class="font-headline text-lg font-bold text-primary">82%</p>
+</div>
+<div class="h-3 w-full bg-surface-dim rounded-full overflow-hidden p-[1px]">
+<div class="h-full bio-gauge-track rounded-full shadow-[0_0_12px_rgba(223,142,255,0.4)]" style="width: 82%;"></div>
+</div>
+<p class="mt-4 text-xs text-on-surface-variant italic">Next Level: "Sentient Biocode" unlocks at 5,000 XP</p>
+</section>
+<!-- Achievements Grid -->
+<section class="mb-12">
+<h3 class="font-label text-xs text-on-surface-variant uppercase mb-6 tracking-widest border-b border-outline-variant/30 pb-2">Unlocked_Augmentations</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-variant/40 p-4 rounded-sm flex flex-col items-center text-center group hover:bg-surface-variant transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-surface-container-lowest rounded-full mb-3 shadow-[0_0_15px_rgba(0,238,252,0.2)]">
+<span class="material-symbols-outlined text-secondary text-2xl" data-icon="eco">eco</span>
+</div>
+<p class="font-headline text-sm font-bold">7-Day Green Streak</p>
+</div>
+<div class="bg-surface-variant/40 p-4 rounded-sm flex flex-col items-center text-center group hover:bg-surface-variant transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-surface-container-lowest rounded-full mb-3 shadow-[0_0_15px_rgba(255,110,129,0.2)]">
+<span class="material-symbols-outlined text-tertiary text-2xl" data-icon="fitness_center">fitness_center</span>
+</div>
+<p class="font-headline text-sm font-bold">Protein Pro</p>
+</div>
+<div class="bg-surface-variant/40 p-4 rounded-sm flex flex-col items-center text-center group hover:bg-surface-variant transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-surface-container-lowest rounded-full mb-3 shadow-[0_0_15px_rgba(223,142,255,0.2)]">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="water_drop">water_drop</span>
+</div>
+<p class="font-headline text-sm font-bold">Hydration Lord</p>
+</div>
+<div class="bg-surface-variant/40 p-4 rounded-sm flex flex-col items-center text-center group hover:bg-surface-variant transition-colors">
+<div class="w-12 h-12 flex items-center justify-center bg-surface-container-lowest rounded-full mb-3 grayscale opacity-40">
+<span class="material-symbols-outlined text-on-surface-variant text-2xl" data-icon="bedtime">bedtime</span>
+</div>
+<p class="font-headline text-sm font-bold text-on-surface-variant">Sleep Architect</p>
+</div>
+</div>
+</section>
+<!-- Settings List -->
+<section class="space-y-2">
+<h3 class="font-label text-xs text-on-surface-variant uppercase mb-4 tracking-widest border-b border-outline-variant/30 pb-2">Terminal_Settings</h3>
+<div class="flex items-center justify-between p-5 bg-surface-container/60 backdrop-blur-md hover:bg-surface-container transition-all group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="person_filled">person</span>
+<span class="font-medium text-on-surface">Account Parameters</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-5 bg-surface-container/60 backdrop-blur-md hover:bg-surface-container transition-all group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-colors" data-icon="notifications">notifications</span>
+<span class="font-medium text-on-surface">Neural Notifications</span>
+</div>
+<div class="w-10 h-5 bg-secondary/20 rounded-full relative flex items-center px-1">
+<div class="w-3 h-3 bg-secondary rounded-full ml-auto shadow-[0_0_8px_rgba(0,238,252,0.5)]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-5 bg-surface-container/60 backdrop-blur-md hover:bg-surface-container transition-all group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-tertiary transition-colors" data-icon="privacy_tip">privacy_tip</span>
+<span class="font-medium text-on-surface">Data Encryption</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-5 bg-error/5 border-l-2 border-error hover:bg-error/10 transition-all group mt-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-error" data-icon="logout">logout</span>
+<span class="font-medium text-error">Terminate Session</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 flex justify-around items-center px-4 pb-4 bg-[#070e1b]/60 backdrop-blur-2xl border-t border-[#00eefc]/10 shadow-[0_-8px_24px_rgba(0,238,252,0.05)] z-50">
+<a href="index.html" class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-[#00eefc] transition-all active:scale-90 duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-[0.1em] mt-1">Dash</span>
+</a>
+<a href="food_scanner.html" class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-[#00eefc] transition-all active:scale-90 duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="center_focus_strong">center_focus_strong</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-[0.1em] mt-1">Scan</span>
+</a>
+<a href="insights.html" class="flex flex-col items-center justify-center text-slate-500 opacity-60 hover:text-[#00eefc] transition-all active:scale-90 duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-[0.1em] mt-1">Stats</span>
+</a>
+<a href="profile.html" class="flex flex-col items-center justify-center text-[#df8eff] drop-shadow-[0_0_8px_rgba(223,142,255,0.6)] scale-110 active:scale-90 duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Space_Grotesk'] text-[10px] uppercase tracking-[0.1em] mt-1">User</span>
+</a>
+</nav>
+</body></html>
