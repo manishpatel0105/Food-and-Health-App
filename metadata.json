@@ -1,0 +1,169 @@
+{
+  "name": "projects/16498916159251345669",
+  "title": "Food Scanner",
+  "visibility": "PUBLIC",
+  "createTime": "2026-03-31T08:47:13.505899Z",
+  "updateTime": "2026-03-31T09:04:31.014055Z",
+  "projectType": "TEXT_TO_UI_PRO",
+  "thumbnailScreenshot": {
+    "name": "projects/16498916159251345669/files/e4a4d09913e84c1ab33576a0068ece8b",
+    "downloadUrl": "https://lh3.googleusercontent.com/aida/ADBb0uhIacATlLXDaAQSjF7lAapycQQgXo0CzQnUsi8QRCs8az9QOi5tZO3X0Q59ANDIfRWcOywG3zreS6Audgmp-6HbBwLJrpsSft0V8akp4piIJHGAzw_dcGicuTuNTx3HUc_pnypXISyMkn-BHIAttuRqRuaZXWZ4m94yetnz4i1MatVCMc8Xs_6fNiCnvV9hiQFsQHl0PeVgKJpw_5VznCvVgJAyaIKYQqEPc1ipx-e9E86O5H0rBhwWFDkq"
+  },
+  "origin": "STITCH",
+  "deviceType": "MOBILE",
+  "designTheme": {
+    "colorMode": "DARK",
+    "font": "SPACE_GROTESK",
+    "roundness": "ROUND_FOUR",
+    "customColor": "#BD00FF",
+    "headlineFont": "SPACE_GROTESK",
+    "bodyFont": "INTER",
+    "labelFont": "SPACE_GROTESK",
+    "namedColors": {
+      "background": "#070e1b",
+      "error": "#ff6e84",
+      "error_container": "#a70138",
+      "error_dim": "#d73357",
+      "inverse_on_surface": "#4e5565",
+      "inverse_primary": "#9a00d0",
+      "inverse_surface": "#f9f9ff",
+      "on_background": "#e2e8fb",
+      "on_error": "#490013",
+      "on_error_container": "#ffb2b9",
+      "on_primary": "#4f006d",
+      "on_primary_container": "#3d0055",
+      "on_primary_fixed": "#000000",
+      "on_primary_fixed_variant": "#4b0068",
+      "on_secondary": "#005359",
+      "on_secondary_container": "#e3fdff",
+      "on_secondary_fixed": "#003f43",
+      "on_secondary_fixed_variant": "#005e64",
+      "on_surface": "#e2e8fb",
+      "on_surface_variant": "#a5abbd",
+      "on_tertiary": "#490012",
+      "on_tertiary_container": "#000000",
+      "on_tertiary_fixed": "#39000c",
+      "on_tertiary_fixed_variant": "#780023",
+      "outline": "#6f7586",
+      "outline_variant": "#414857",
+      "primary": "#df8eff",
+      "primary_container": "#d878ff",
+      "primary_dim": "#bb00fc",
+      "primary_fixed": "#d878ff",
+      "primary_fixed_dim": "#d061ff",
+      "secondary": "#00eefc",
+      "secondary_container": "#006970",
+      "secondary_dim": "#00deec",
+      "secondary_fixed": "#00eefc",
+      "secondary_fixed_dim": "#00deec",
+      "surface": "#070e1b",
+      "surface_bright": "#222c41",
+      "surface_container": "#11192a",
+      "surface_container_high": "#172031",
+      "surface_container_highest": "#1c2639",
+      "surface_container_low": "#0c1322",
+      "surface_container_lowest": "#000000",
+      "surface_dim": "#070e1b",
+      "surface_tint": "#df8eff",
+      "surface_variant": "#1c2639",
+      "tertiary": "#ff6e81",
+      "tertiary_container": "#ff0355",
+      "tertiary_dim": "#e7004c",
+      "tertiary_fixed": "#ff909b",
+      "tertiary_fixed_dim": "#ff7989"
+    },
+    "designMd": "# Design System Strategy: The Neon Kinetic Framework\n\n## 1. Overview & Creative North Star\n**The Creative North Star: \"The Synthetic Biome\"**\nThis design system rejects the sterile, flat aesthetics of traditional health apps. Instead, it positions the user as a high-tech \"Bio-Hacker\" navigating a sophisticated, data-rich interface. The system moves beyond \"Cyberpunk\" cliches by employing a \"Synthetic Biome\" approach: combining the aggressive precision of high-tech machinery with the fluid, organic gradients of digital health.\n\nWe break the \"template\" look through **Kinetic Asymmetry**. Layouts should not feel like static grids but like active HUDs (Heads-Up Displays). Elements should overlap slightly, using high-contrast typography scales and varying surface densities to create a sense of deep, digital space.\n\n---\n\n## 2. Colors: Chromatic Energy\nThe palette is a high-contrast interplay between the absolute void of the background and the electric energy of the functional accents.\n\n### The Palette\n*   **Background (The Void):** `#070e1b`. All primary canvases must use this deep navy-black.\n*   **Primary (Pulse Purple):** `#df8eff`. Use this for high-priority actions and \"Bio-AI\" moments.\n*   **Secondary (Cyber Cyan):** `#00eefc`. Reserved for hydration, cooling, and stability data.\n*   **Tertiary (Vibrant Nerve):** `#ff6e81`. Used for metabolic heat, warnings, and high-energy alerts.\n\n### The \"No-Line\" Rule\nTraditional 1px solid borders are strictly prohibited for sectioning. Structural boundaries are defined by:\n1.  **Tonal Transitions:** Moving from `surface` to `surface-container-low`.\n2.  **Luminescent Fills:** Using a very low-opacity `primary` or `secondary` tint to fill a container background instead of outlining it.\n3.  **Negative Space:** Utilizing the `Spacing Scale` (specifically `spacing.8` and `spacing.12`) to allow the eye to define regions.\n\n### Surface Hierarchy & Nesting\nTreat the UI as a series of stacked, semi-transparent layers.\n*   **Level 0 (Base):** `surface` (#070e1b).\n*   **Level 1 (Sectioning):** `surface-container-low`.\n*   **Level 2 (Active Cards):** `surface-container-high` with a 15-20px `backdrop-blur`.\n*   **Level 3 (Pop-overs/Modals):** `surface-bright`.\n\n### The \"Glass & Gradient\" Rule\nAll high-fidelity components must utilize **Linear Gradients** rather than flat fills. Main CTAs should transition from `primary` (#df8eff) to `primary-container` (#d878ff) at a 135-degree angle to provide a \"lit-from-within\" glow.\n\n---\n\n## 3. Typography: Data Editorial\nWe utilize a hierarchy that balances the aggressive geometry of `Space Grotesk` with the high-utility legibility of `Inter`.\n\n*   **Display & Headlines (Space Grotesk):** Use `display-lg` (3.5rem) for hero stats (e.g., daily calorie totals). These should feel like \"environmental typography\" in a sci-fi HUD.\n*   **Titles & Body (Inter):** Use `title-md` and `body-lg` for all instructional content. The clean nature of Inter provides a necessary \"grounding\" effect against the vibrant headers.\n*   **Labels (The \"Code\" Style):** Use `label-sm` in uppercase with a `0.1em` letter-spacing. This evokes a \"data readout\" aesthetic, perfect for metadata like \"MACRONUTRIENT_PROFILE\" or \"TIMESTAMP_0800\".\n\n---\n\n## 4. Elevation & Depth: The HUD Principle\nDepth is achieved through **Luminescent Layering** rather than shadows.\n\n*   **The Layering Principle:** Place a `surface-container-highest` card on a `surface` background. To emphasize depth, apply a `primary` tint at 2% opacity to the top layer.\n*   **Ambient Glows:** Traditional shadows are replaced by **Ambient Glows**. Use the `primary` or `secondary` token for the shadow color, with a `24px` to `40px` blur and an opacity no higher than `12%`. This makes components appear to hover via electromagnetic lift.\n*   **The \"Ghost Border\" Fallback:** When a boundary is essential, use `outline-variant` at **15% opacity**. This \"Ghost Border\" should look like a faint light-leak at the edge of a glass pane.\n*   **Glassmorphism:** All cards must use `surface-variant` at 40-60% opacity with a `backdrop-filter: blur(12px)`.\n\n---\n\n## 5. Components: The High-Tech Toolkit\n\n### Buttons (Tactile Triggers)\n*   **Primary:** Gradient fill (`primary` to `primary-dim`), `rounded-sm` (0.125rem) for a sharp, military feel. Add a 1px \"Ghost Border\" using `on-primary` at 20% opacity.\n*   **Secondary:** No fill. `outline` border. On hover, the background pulses with a 10% `secondary` tint.\n\n### Input Fields (Data Entry)\n*   Forgo the four-sided box. Use a \"Bracket\" style: a `2px` bottom border of `outline` that turns into `secondary` (Cyan) upon focus, with small vertical ticks at the ends.\n\n### Cards & Lists (The Intelligence Feed)\n*   **Rule:** No dividers. Separate items using `surface-container-lowest` for the item background and `spacing.2` as a gap to let the `surface` (void) peek through.\n*   **Nesting:** A \"Meal Card\" might use `surface-container-high`, while the \"Ingredients List\" inside it uses `surface-container-low`.\n\n### Signature Component: The \"Bio-Gauge\"\nA bespoke circular or semi-circular progress tracker using `primary` gradients for progress and `surface-variant` for the track. Add a `pulse` animation to the \"current value\" node to simulate a heartbeat.\n\n---\n\n## 6. Do\u2019s and Don\u2019ts\n\n### Do:\n*   **Do** use intentional asymmetry. Align a headline to the left but offset the body text to the right using `spacing.10`.\n*   **Do** use monochromatic icon sets with a `0 0 8px` glow effect in their respective category color (e.g., Green for vitamins, Red for heart rate).\n*   **Do** use `spaceGrotesk` for numbers. Numbers are data; data is the hero of the app.\n\n### Don't:\n*   **Don't** use standard `rounded-lg` (0.5rem) for everything. Stick to `rounded-sm` or `none` for a more aggressive, futuristic edge.\n*   **Don't** use pure white (#ffffff) for body text. Use `on-surface-variant` (#a5abbd) to reduce eye strain in dark environments.\n*   **Don't** use standard Material or iOS transition speeds. Use \"Snappy\" eases (e.g., `cubic-bezier(0.4, 0, 0.2, 1)`) with durations under 200ms to feel high-performance.",
+    "colorVariant": "VIBRANT",
+    "overridePrimaryColor": "#BD00FF",
+    "overrideSecondaryColor": "#00F0FF",
+    "overrideTertiaryColor": "#FF0055",
+    "overrideNeutralColor": "#050B18",
+    "spacingScale": 2
+  },
+  "metadata": {
+    "userRole": "OWNER"
+  },
+  "projectId": "16498916159251345669",
+  "screens": {
+    "09866b87f4fe4b0295cf70ef36843fed": {
+      "id": "09866b87f4fe4b0295cf70ef36843fed",
+      "sourceScreen": "projects/16498916159251345669/screens/09866b87f4fe4b0295cf70ef36843fed",
+      "x": 2106,
+      "y": -75,
+      "width": 390,
+      "height": 1845
+    },
+    "15a846568da54350bf311a802b1be79b": {
+      "id": "15a846568da54350bf311a802b1be79b",
+      "sourceScreen": "projects/16498916159251345669/screens/15a846568da54350bf311a802b1be79b",
+      "x": 1716,
+      "y": -6,
+      "width": 390,
+      "height": 884
+    },
+    "2cfe0c8cdd484a66b8161be9c874b5cf": {
+      "id": "2cfe0c8cdd484a66b8161be9c874b5cf",
+      "sourceScreen": "projects/16498916159251345669/screens/2cfe0c8cdd484a66b8161be9c874b5cf",
+      "x": 1024,
+      "y": 10294,
+      "width": 390,
+      "height": 1098
+    },
+    "5781ce3c009b4ddc81d5876c17489bfe": {
+      "id": "5781ce3c009b4ddc81d5876c17489bfe",
+      "sourceScreen": "projects/16498916159251345669/screens/5781ce3c009b4ddc81d5876c17489bfe",
+      "x": 969,
+      "y": -215,
+      "width": 390,
+      "height": 2541
+    },
+    "67804b01038d447e994376dfdf7b333d": {
+      "id": "67804b01038d447e994376dfdf7b333d",
+      "sourceScreen": "projects/16498916159251345669/screens/67804b01038d447e994376dfdf7b333d",
+      "x": 2496,
+      "y": -75,
+      "width": 390,
+      "height": 1535
+    },
+    "7fec320c480f4f078d4175e3895b7b91": {
+      "id": "7fec320c480f4f078d4175e3895b7b91",
+      "sourceScreen": "projects/16498916159251345669/screens/7fec320c480f4f078d4175e3895b7b91",
+      "x": 1024,
+      "y": 5595,
+      "width": 390,
+      "height": 2541
+    },
+    "997753d54a6e4850ad1569f968cdd603": {
+      "id": "997753d54a6e4850ad1569f968cdd603",
+      "sourceScreen": "projects/16498916159251345669/screens/997753d54a6e4850ad1569f968cdd603",
+      "x": 1024,
+      "y": 2797,
+      "width": 390,
+      "height": 2541
+    },
+    "bb89c3cb435d46c5b424d5f6f13f7a9d": {
+      "id": "bb89c3cb435d46c5b424d5f6f13f7a9d",
+      "sourceScreen": "projects/16498916159251345669/screens/bb89c3cb435d46c5b424d5f6f13f7a9d",
+      "x": 1024,
+      "y": 8393,
+      "width": 390,
+      "height": 1645
+    },
+    "dafe461f0fa64a68aa2970a8d0d3b364": {
+      "id": "dafe461f0fa64a68aa2970a8d0d3b364",
+      "sourceScreen": "projects/16498916159251345669/screens/dafe461f0fa64a68aa2970a8d0d3b364",
+      "x": 2950,
+      "y": -75,
+      "width": 390,
+      "height": 884
+    },
+    "dfdfc7f001ac4d35aeabf5647ae78cf0": {
+      "id": "dfdfc7f001ac4d35aeabf5647ae78cf0",
+      "sourceScreen": "projects/16498916159251345669/screens/dfdfc7f001ac4d35aeabf5647ae78cf0",
+      "x": 1359,
+      "y": -75,
+      "width": 390,
+      "height": 2211
+    }
+  }
+}
